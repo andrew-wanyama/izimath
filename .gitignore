@@ -1,0 +1,4 @@
+# Ignore files left as backup by the text editor
+*~
+# Ignore Java class files (bytecodes)
+*.class
