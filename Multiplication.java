@@ -2,6 +2,7 @@
 // Program that helps primary grade students learn multiplication.
 import java.security.SecureRandom;
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 public class Multiplication
 {
@@ -14,7 +15,6 @@ public class Multiplication
                number2, // first number to multiply
                product; // product of number1 and number2
     
-
     public static void main(String[] args)
     {
         System.out.printf("\t\t%s%n%s%n%s%n%s%n  %s%n  %s%n%n",
@@ -33,16 +33,62 @@ public class Multiplication
         while (input.hasNext())
         {
             // read and check learner's answer
-            answer = input.nextInt();
-            if (answer == product)
+            try
             {
-                // if answer is correct, generate another question
-                System.out.println("Very good!");
-                generateQuestion();           
+                answer = input.nextInt();
+                if (answer == product)
+                {
+                    // if answer is correct, 
+                    // vary responses and generate another question
+                    switch (1 + randomNumbers.nextInt(4))
+                    {
+                        case 1:
+                            System.out.println("Very good!");
+                            break;
+                        case 2:
+                            System.out.println("Excellent!");
+                            break;
+                        case 3:
+                            System.out.println("Nice work!");
+                            break;
+                        case 4:
+                            System.out.println("Keep up the good work!");
+                            break;
+                    }
+                    System.out.println(); // skip a line                
+                    generateQuestion();           
+                }
+                else // if answer is incorrect,
+                {
+                    // vary prompts asking the learner to attempt same question
+                    switch (1 + randomNumbers.nextInt(4))
+                    {
+                        case 1:
+                            System.out.print("No. Please try again: ");
+                            break;
+                        case 2:
+                            System.out.print("Wrong. Try once more: ");
+                            break;
+                        case 3:
+                            System.out.print("Don't give up! Please try again: ");
+                            break;
+                        case 4:
+                            System.out.print("No. Give it another try: ");
+                            break;
+                    }
+                }
+            } // end try block
+            catch (InputMismatchException inputMismatchException)
+            {
+                System.err.printf("%nException: %s%n", inputMismatchException);
+                // discard input so user can try again
+                input.nextLine();
+                System.out.print("You must enter integers. Please try again: ");
             }
-            else
-                // if answer is incorrect, learner attempts same question
-                System.out.print("No. Please try again: ");
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            } // end catch blocks
         } // end while
     } // end main
 
