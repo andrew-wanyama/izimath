@@ -14,6 +14,11 @@ public class Multiplication
     static int number1, // first number to multiply
                number2, // first number to multiply
                product; // product of number1 and number2
+    // count number of correct and incorrect responses
+    static int responsesCounter = 0,
+               correctResponses = 0,
+               incorrectResponses = 0;
+
     
     public static void main(String[] args)
     {
@@ -36,6 +41,8 @@ public class Multiplication
             try
             {
                 answer = input.nextInt();
+                ++responsesCounter;
+
                 if (answer == product)
                 {
                     // if answer is correct, 
@@ -55,8 +62,16 @@ public class Multiplication
                             System.out.println("Keep up the good work!");
                             break;
                     }
-                    System.out.println(); // skip a line                
-                    generateQuestion();           
+                    ++correctResponses; // increment number of correct responses
+                    System.out.println(); // skip a line
+                    if (responsesCounter == 10)
+                    {
+                        System.out.println("Calculating your performance...");
+                        calculatePerformance();
+                        break;
+                    }
+                    else
+                        generateQuestion();           
                 }
                 else // if answer is incorrect,
                 {
@@ -76,6 +91,14 @@ public class Multiplication
                             System.out.print("No. Give it another try: ");
                             break;
                     }
+                    // increment number of incorrect responses
+                    ++incorrectResponses;
+                    if (responsesCounter == 10)
+                    {
+                        System.out.printf("%nCalculating your performance...%n");
+                        calculatePerformance();
+                        break;
+                    }
                 }
             } // end try block
             catch (InputMismatchException inputMismatchException)
@@ -88,7 +111,7 @@ public class Multiplication
             catch (Exception exception)
             {
                 exception.printStackTrace();
-            } // end catch blocks
+            } // end catch blocks             
         } // end while
     } // end main
 
@@ -103,5 +126,22 @@ public class Multiplication
 
         // prompt learner with a multiplication question
         System.out.printf("How much is %d times %d? ", number1, number2);
+    }
+
+    // after 10 answers, calculate the percentage of correct responses
+    private static void calculatePerformance()
+    {
+        System.out.println();
+        System.out.printf("Correct answers: %d%n", correctResponses);
+        System.out.printf("Incorrect answers: %d%n", incorrectResponses);
+
+        double performance = (double) correctResponses / responsesCounter * 100;
+        System.out.printf("Percentage of correct answers: %.2f%s%n",
+            performance, "%");
+            
+        if (performance < 75)
+            System.out.println("Please ask your teacher for extra help.");
+        else
+            System.out.println("Congratulations, you are ready to go to the next level!");
     }
 } // end class Multiplication
