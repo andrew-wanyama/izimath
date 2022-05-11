@@ -75,6 +75,15 @@ public class Multiplication
                 }
                 else // if answer is incorrect,
                 {
+                    // increment number of incorrect responses
+                    ++incorrectResponses;
+                    if (responsesCounter == 10)
+                    {
+                        System.out.printf("%s%n%n%s%n",
+                        "Don't give up!", "Calculating your performance...");
+                        calculatePerformance();
+                        break;
+                    }
                     // vary prompts asking the learner to attempt same question
                     switch (1 + randomNumbers.nextInt(4))
                     {
@@ -90,15 +99,7 @@ public class Multiplication
                         case 4:
                             System.out.print("No. Give it another try: ");
                             break;
-                    }
-                    // increment number of incorrect responses
-                    ++incorrectResponses;
-                    if (responsesCounter == 10)
-                    {
-                        System.out.printf("%nCalculating your performance...%n");
-                        calculatePerformance();
-                        break;
-                    }
+                    }                    
                 }
             } // end try block
             catch (InputMismatchException inputMismatchException)
