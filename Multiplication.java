@@ -122,26 +122,25 @@ public class Multiplication
 
     private static void chooseDifficultyLevel()
     {
-        System.out.printf("%s%n%s%n%s%n", "Choose difficulty level:",
-            "1 - Level 1", "2 - Level 2");
+        System.out.printf("%s%n%s%n", "Choose difficulty level:",
+            "(Option 1 for Level 1, 2 for Level 2, 3 for Level 3, and so on)");
         while (difficultyLevel == 0)
         {
             try
             {
                 int level = input.nextInt();
-                if (level == 1 || level == 2)
+                if (level >= 1)
                     difficultyLevel = level;
                 else
                     System.out.println(
-                      "Invalid input. Enter 1 for Level 1 or 2 for Level 2:");
+                      "Invalid (Enter 1 for Level 1, 2 for Level 2, and so on):");
             }
             catch (InputMismatchException inputMismatchException)
             {
                 System.err.printf("Exception: %s%n", inputMismatchException);
                 
                 input.nextLine(); // discard input so user can try again
-                System.out.println(
-                    "You must enter an integer. Please try again: ");
+                System.out.println("You must enter an integer. Please try again:");
             }
             catch (Exception exception)
             {
@@ -154,19 +153,9 @@ public class Multiplication
     // method that generates a new question
     private static void generateQuestion(int difficultLevel)
     {
-        switch (difficultLevel)
-        {
-            // difficult level 1: use one-digit random positive integers
-            case 1:
-                number1 = 1 + randomNumbers.nextInt(9);
-                number2 = 1 + randomNumbers.nextInt(9);
-                break;
-            // difficult level 2: random positive ints as large as two digits
-            case 2:
-                number1 = 3 + randomNumbers.nextInt(10);
-                number2 = 3 + randomNumbers.nextInt(10);
-                break;
-        }
+        int level = difficultLevel;
+        number1 = level + (level + 1) * randomNumbers.nextInt(5);
+        number2 = (level + 1) + randomNumbers.nextInt(8);
         // multiply the two integers then store result in product
         product = number1 * number2;
 
