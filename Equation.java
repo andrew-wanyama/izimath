@@ -71,7 +71,7 @@ public class Equation
 
     public Operator getOperationType()
     {
-        return this.operationType;
+        return operationType;
     }
 
     public void setOperationType(Operator operationType)
@@ -82,7 +82,8 @@ public class Equation
     // returns the left hand side of the equation as a String
     public String getLeftHandSide()
     {
-        return leftOperand + " " + operationType.getSymbol() + rightOperand;
+        return leftOperand + " " + getOperationType().getSymbol() +
+          " " + rightOperand;
     }
 
     // returns the right hand side of the equation as a String
