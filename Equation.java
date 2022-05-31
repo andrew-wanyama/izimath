@@ -87,9 +87,9 @@ public class Equation
     }
 
     // returns the right hand side of the equation as a String
-    public String getRightHandSide()
+    public int getRightHandSide()
     {
-        return "" + getResult();
+        return getResult();
     }
 
     // returns a String representation of an Equation

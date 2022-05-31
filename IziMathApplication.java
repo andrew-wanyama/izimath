@@ -1,55 +1,59 @@
-// Multiplication.java
-// Program that helps primary grade students learn multiplication.
-import java.security.SecureRandom;
+// IziMathApplication.java
+// The program generates Math quizzes based on user's skill level,
+// and selected arithmetic operation.
 import java.util.Scanner;
 import java.util.InputMismatchException;
+import java.security.SecureRandom;
 
-public class Multiplication
+public class IziMathApplication
 {
     // create a Scanner to obtain input from the command window
     private static Scanner input = new Scanner(System.in);
     // create a secure random number generator
     private static final SecureRandom randomNumbers = new SecureRandom();
-    
-    static int number1, // first number to multiply
-               number2, // first number to multiply
-               product; // product of number1 and number2
+    private static EquationGenerator equationGenerator;
+
+    private static int difficultyLevel = 0; // skill level
     // count number of correct and incorrect responses
-    static int responsesCounter = 0,
+    private static int responsesCounter = 0,
                correctResponses = 0,
                incorrectResponses = 0;
-    // store difficulty level
-    static int difficultyLevel = 0;
-    static String studentName; // learner's name
+    private static String studentName; // learner's name
 
     public static void main(String[] args)
     {
         System.out.printf("Please enter your name: ");
         studentName = input.nextLine();
+        // choose skill level
         chooseDifficultyLevel();
+        // TODO choose type of operation
 
         System.out.printf("\t\t\t%s%n%s%n%s%n%s%n  %s%n  %s%n%n",
-            "Easy Multiplication",
+            "Easy " + Operator.ADDITION.name(),
             "----------------------------------------------------------------",
             "Type your answer to the question at the prompt then press Enter",
-            "Type the end-of-file indicator to terminate the puzzle:",
+            "Type the end-of-file indicator to terminate the Quiz:",
             "On UNIX/Linux/Mac OS X type <Ctrl> d then press Enter",
             "On Windows type <Ctrl> z then press Enter");
 
-        // generate question and prompt for input
-        generateQuestion(difficultyLevel);
-        int answer = 0;
-
+        // construct an equation in selected skill level and operation type
+        equationGenerator = new EquationGenerator(difficultyLevel, Operator.ADDITION);
+        generateQuestion();
+        int answer = 0, userAnswer = 0;
+        
         // loop until the end-of-file indicator is entered
         while (input.hasNext())
         {
-            // read and check learner's answer
+            // obtain and store the correct answer
+            answer = equationGenerator.checkAnswer();
             try
             {
-                answer = input.nextInt();
+                // read and check user's answer
+                userAnswer = input.nextInt();
+                answer = equationGenerator.checkAnswer();
                 ++responsesCounter;
 
-                if (answer == product)
+                if (userAnswer == answer)
                 {
                     // if answer is correct, 
                     // vary responses and generate another question
@@ -66,9 +70,9 @@ public class Multiplication
                             break;
                         case 4:
                             System.out.println("Keep up the good work!");
-                            break;
                     }
-                    ++correctResponses; // increment number of correct responses
+                    // increment number of correct responses
+                    ++correctResponses;
                     System.out.println(); // skip a line
                     if (responsesCounter == 10)
                     {
@@ -76,7 +80,7 @@ public class Multiplication
                         break;
                     }
                     else
-                        generateQuestion(difficultyLevel);           
+                        generateQuestion();           
                 }
                 else // if answer is incorrect,
                 {
@@ -102,8 +106,7 @@ public class Multiplication
                             break;
                         case 4:
                             System.out.print("No. Give it another try: ");
-                            break;
-                    }                    
+                    }
                 }
             } // end try block
             catch (InputMismatchException inputMismatchException)
@@ -150,18 +153,14 @@ public class Multiplication
         }
     } // end method chooseDifficultyLevel
 
-    // method that generates a new question
-    private static void generateQuestion(int difficultLevel)
+    private static void generateQuestion()
     {
-        int level = difficultLevel;
-        number1 = level + (level + 1) * randomNumbers.nextInt(5);
-        number2 = (level + 1) + randomNumbers.nextInt(8);
-        // multiply the two integers then store result in product
-        product = number1 * number2;
-
-        // prompt learner with a multiplication question
-        System.out.printf("How much is %d times %d? ", number1, number2);
-    } // end method generateQuestion
+        equationGenerator = // construct a new equation
+            new EquationGenerator(difficultyLevel, Operator.ADDITION);
+        // prompt learner with selected arithmetic question
+        System.out.printf("How much is %s? ",
+            equationGenerator.generateQuestion());
+    }
 
     // after 10 answers, calculate the percentage of correct responses
     private static void calculatePerformance()
@@ -184,4 +183,4 @@ public class Multiplication
                 "Congratulations, " + studentName + "!",
                 "You are ready to go to Level " + (++difficultyLevel) + ".");
     } // end method calculatePerformance
-} // end class Multiplication
+} // end class IziMathApplication
